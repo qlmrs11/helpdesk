@@ -5,7 +5,7 @@ import StatCard from '@/components/dashboard/StatCard.vue'
 <template>
   <div class="dashboard">
     <section class="header">
-      <h1>InDesk Dashboard</h1>
+      <h1>User Dashboard</h1>
       <p class="subtitle">Summary of today's internal support ticket activity</p>
     </section>
 
@@ -54,46 +54,3 @@ import StatCard from '@/components/dashboard/StatCard.vue'
     </section>
   </div>
 </template>
-
-<style scoped>
-.dashboard {
-  display: grid;
-  gap: 20px;
-}
-.header h1 {
-  font-size: 1.8rem;
-  margin: 0;
-}
-.subtitle { color: var(--color-text-soft); margin-top: 4px; }
-
-.stats {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.content {
-  display: grid;
-  grid-template-columns: 1.5fr 1fr;
-  gap: 16px;
-}
-.panel {
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  padding: 16px;
-  background: var(--color-background);
-}
-.panel h3 { margin-top: 0; margin-bottom: 12px; }
-.list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
-.list li { display: flex; align-items: center; justify-content: space-between; }
-.muted { color: var(--color-text-soft); }
-.badge { font-size: .75rem; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--color-border); }
-.badge.ok { background: rgba(34,197,94,.12); color: #16a34a; }
-.badge.warn { background: rgba(239,68,68,.12); color: #dc2626; }
-.badge.info { background: rgba(59,130,246,.12); color: #2563eb; }
-
-@media (max-width: 1024px) {
-  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .content { grid-template-columns: 1fr; }
-}
-</style>

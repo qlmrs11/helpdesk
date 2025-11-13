@@ -1,26 +1,27 @@
 <template>
   <section class="about">
     <div class="hero">
-      <h1>About Web Hospital</h1>
-      <p class="subtitle">A lightweight dashboard and support portal for hospital operations.</p>
+      <h1>About InDesk (Internal Helpdesk)</h1>
+      <p class="subtitle">An internal platform to manage employee support requests to IT Support and Human Resource
+        in a structured, transparent, and efficient way.</p>
     </div>
 
     <div class="grid">
       <div class="card">
         <h3>Mission</h3>
-        <p>Provide a clear overview of daily activities, upcoming appointments, and support tickets in one place.</p>
+        <p>Document every employee issue/request and enable IT/HR teams to handle, monitor status, and communicate effectively.</p>
       </div>
       <div class="card">
         <h3>Technology</h3>
-        <p>Built with Vue 3 and Vite for fast development and a smooth user experience.</p>
+        <p>Built with Vue 3 + Vite for a fast, modern development experience.</p>
       </div>
       <div class="card">
         <h3>Features</h3>
         <ul>
-          <li>Dashboard stats</li>
-          <li>Appointments list</li>
-          <li>Support tickets</li>
-          <li>Authentication pages</li>
+          <li>Ticket management (User & Helper)</li>
+          <li>Comments and status history</li>
+          <li>Role-based dashboards (User/Helper)</li>
+          <li>Reports for Helpers (status filters)</li>
         </ul>
       </div>
     </div>
