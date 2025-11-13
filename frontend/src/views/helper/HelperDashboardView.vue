@@ -63,7 +63,7 @@ const { notYetWorked, workingOn, awaiting, completed } = t
             <td>{{ it.category }}</td>
             <td>{{ it.priority }}</td>
             <td>
-              <span class="badge awaiting">Awaiting User Confirmation</span>
+              <span class="badge awaiting-user-confirmation">Awaiting User Confirmation</span>
             </td>
             <td>
               <RouterLink :to="`/helper/ticket/${it.id}`" class="btn primary">View details</RouterLink>
@@ -140,10 +140,10 @@ const { notYetWorked, workingOn, awaiting, completed } = t
   font-size: 0.85rem;
   box-shadow: 0 1px 0 rgba(0,0,0,.04) inset;
 }
-.badge.not-yet-worked { background: linear-gradient(180deg, #f6ad2e 0%, #e79615 100%); }
-.badge.working-on { background: linear-gradient(180deg, #5b7cfa 0%, #3b5bdb 100%); }
-.badge.awaiting { background: linear-gradient(180deg, #f9c64b 0%, #f3b232 100%); color: #ffffff; }
-.badge.completed { background: linear-gradient(180deg, #34d399 0%, #10b981 100%); }
+.badge.not-yet-worked { background: linear-gradient(180deg, #f87171 0%, #dc2626 100%); }
+.badge.working-on { background: linear-gradient(180deg, #93c5fd 0%, #3b82f6 100%); }
+.badge.awaiting-user-confirmation { background: linear-gradient(180deg, #fcd34d 0%, #f59e0b 100%); }
+.badge.completed { background: linear-gradient(180deg, #86efac 0%, #22c55e 100%); }
 
 .btn { display: inline-flex; justify-content: center; padding: 6px 10px; border-radius: 10px; border: 1px solid var(--color-border); cursor: pointer; transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.05s ease; font-size: 0.9rem; text-decoration: none; }
 .btn.primary { background: linear-gradient(180deg, #3b5bdb 0%, #274690 100%); color: white; border-color: transparent; font-weight: 600; }

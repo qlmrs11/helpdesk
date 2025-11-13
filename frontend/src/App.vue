@@ -151,8 +151,8 @@ watch(theme, (t) => applyTheme(t), { immediate: true })
 }
 .topbar-content { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 .left-group { display: inline-flex; align-items: center; gap: 12px; }
-.toplabel { color: #9aa3af; font-size: 0.875rem; }
-.toplink { display: inline-flex; gap: 6px; align-items: center; color: #9aa3af; text-decoration: none; font-size: 0.875rem; }
+.toplabel { color: var(--color-text-soft); font-size: 0.875rem; }
+.toplink { display: inline-flex; gap: 6px; align-items: center; color: var(--color-text-soft); text-decoration: none; font-size: 0.875rem; }
 .toplink:hover, .toplink:focus, .toplink:active { color: #3b5bdb; }
 
 .app-header {
@@ -208,7 +208,7 @@ watch(theme, (t) => applyTheme(t), { immediate: true })
   width: 40px;
   height: 22px;
   border-radius: 999px;
-  border: 1.5px solid #99a7c2;
+  border: 1.5px solid rgba(153, 167, 194, 0.7);
   background: transparent;
 }
 .theme-toggle .dot {

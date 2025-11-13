@@ -44,14 +44,15 @@ const { all } = useTickets()
 
 <style scoped>
 .view-tickets {
-  max-width: 950px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background: #ffffff;
-  border-radius: 12px;
+  max-width: var(--layout-card-max-width);
+  margin: 24px auto 32px;
+  padding: 28px 32px;
+  background: var(--color-background-soft);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   font-family: 'Inter', sans-serif;
-  color: #1e293b;
+  color: var(--color-text);
 }
 
 .header {
@@ -62,10 +63,11 @@ const { all } = useTickets()
 .header h1 {
   font-size: 1.8rem;
   margin-bottom: 0.25rem;
+  color: var(--color-heading);
 }
 
 .subtitle {
-  color: #64748b;
+  color: var(--color-text-soft);
   font-size: 0.95rem;
 }
 
@@ -78,17 +80,23 @@ const { all } = useTickets()
 
 .ticket-table th,
 .ticket-table td {
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--color-border);
   padding: 10px 14px;
 }
 
 .ticket-table th {
-  background: #0f172a;
-  color: #f1f5f9;
+  background: linear-gradient(180deg, rgba(59,91,219,0.13) 0%, rgba(59,91,219,0.13) 100%);
+  color: var(--color-heading);
+  font-weight: 600;
 }
 
 .ticket-table tr:nth-child(even) {
   background: #f8fafc;
+}
+
+/* Dark mode zebra: match helper view */
+:root[data-theme='dark'] .ticket-table tr:nth-child(even) {
+  background: var(--color-background-mute);
 }
 
 /* --- BADGE STATUS --- */
@@ -99,25 +107,26 @@ const { all } = useTickets()
   font-size: 0.8rem;
   font-weight: 600;
   text-transform: capitalize;
+  color: #ffffff;
 }
 
 .badge.not-yet-worked {
-  background: rgba(239, 68, 68, 0.12);
-  color: #dc2626;
+  /* Original base: #dc2626 (red-600) */
+  background: linear-gradient(180deg, #fca5a5 0%, #ef4444 100%);
 }
 
 .badge.working-on {
-  background: rgba(59, 130, 246, 0.12);
-  color: #2563eb;
+  /* Original base: #2563eb (blue-600) */
+  background: linear-gradient(180deg, #93c5fd 0%, #3b82f6 100%);
 }
 
 .badge.awaiting-user-confirmation {
-  background: rgba(245, 158, 11, 0.12);
-  color: #d97706;
+  /* Original base: #d97706 (amber-600) */
+  background: linear-gradient(180deg, #fcd34d 0%, #f59e0b 100%);
 }
 
 .badge.completed {
-  background: rgba(34, 197, 94, 0.12);
-  color: #16a34a;
+  /* Original base: #16a34a (green-600) */
+  background: linear-gradient(180deg, #86efac 0%, #22c55e 100%);
 }
 </style>

@@ -79,7 +79,7 @@
         </div>
 
         <button type="submit" class="btn primary" :disabled="submitting">Submit ticket</button>
-        <button type="button" class="btn" @click="onCancel">Cancel</button>
+        <button type="button" class="btn light" @click="onCancel">Cancel</button>
       </form>
     </div>
   </section>
@@ -101,7 +101,7 @@
   background: var(--color-background-soft);
 }
 .title { margin: 0; font-size: 2rem; font-weight: 600; line-height: 1.1; letter-spacing: -0.02em; color: var(--color-heading); }
-.subtitle { margin: 12px 0 20px; color: var(--color-text-soft); font-size: 1.02rem; line-height: 1.5; font-weight: 500; }
+.subtitle { margin: 12px 0 16px; color: var(--color-text-soft); font-size: 1.02rem; line-height: 1.5; font-weight: 500; }
 .form { display: grid; gap: 16px; }
 .field { display: grid; gap: 6px; }
 .field input, .field textarea, .field select {
@@ -113,6 +113,7 @@
   box-shadow: 0 1px 0 rgba(0,0,0,.02) inset;
   font-size: 0.95rem;
   font-family: inherit; /* use the same font as the site */
+  color: var(--color-heading);
 }
 .field textarea { resize: vertical; min-height: 120px; }
 .row { display: grid; grid-template-columns: 1fr; gap: 16px; }
@@ -130,4 +131,15 @@
 }
 .btn.primary { color: white; border-color: transparent; background: linear-gradient(180deg, #3b5bdb 0%, #274690 100%); height: 44px; font-weight: 600; }
 .btn.primary:hover { background: linear-gradient(180deg, #4563e6 0%, #2c4fa3 100%); }
+.btn.light {
+  color: #1d4ed8;
+  font-weight: 600;
+  background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 100%);
+  border-color: rgba(148, 163, 184, 0.6);
+  box-shadow: 0 2px 6px rgba(148, 163, 184, 0.25);
+}
+.btn.light:hover {
+  background: linear-gradient(180deg, #f8fafc 0%, #cbd5f5 100%);
+  color: #1d4ed8;
+}
 </style>

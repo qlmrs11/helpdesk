@@ -10,7 +10,7 @@ import { RouterLink } from 'vue-router'
 
       <div class="actions">
         <RouterLink to="/ticket" class="btn primary">+ Create Ticket</RouterLink>
-        <RouterLink to="/view-tickets" class="btn">View All Tickets</RouterLink>
+        <RouterLink to="/view-tickets" class="btn light">View All Tickets</RouterLink>
       </div>
 
       <div class="info">
@@ -32,7 +32,7 @@ import { RouterLink } from 'vue-router'
 
 .card {
   width: 100%;
-  max-width: 900px;
+  max-width: var(--layout-card-max-width);
   margin: 0 auto;
   border: 1px solid var(--color-border);
   border-radius: 16px;
@@ -46,6 +46,8 @@ import { RouterLink } from 'vue-router'
 
 .actions { display: flex; gap: 12px; margin: 6px 0 14px; }
 .btn { display: inline-flex; justify-content: center; padding: 8px 12px; border-radius: 12px; border: 1px solid var(--color-border); cursor: pointer; transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.05s ease; font-size: 0.95rem; text-decoration: none; color: var(--color-heading); background: var(--color-background); }
+.btn.light { background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 100%); border-color: rgba(148, 163, 184, 0.6); box-shadow: 0 2px 6px rgba(148, 163, 184, 0.25); color: #1d4ed8; font-weight: 600; }
+.btn.light:hover { background: linear-gradient(180deg, #f8fafc 0%, #cbd5f5 100%); color: #1d4ed8; }
 .btn.primary { background: linear-gradient(180deg, #3b5bdb 0%, #274690 100%); color: white; border-color: transparent; font-weight: 600; }
 .btn.primary:hover { background: linear-gradient(180deg, #4563e6 0%, #2c4fa3 100%); }
 

@@ -96,10 +96,10 @@ function backToDashboard() {
 .admin-detail {
   max-width: 800px;
   margin: 2rem auto;
-  color: #1e293b;
+  color: var(--color-text);
   font-family: 'Inter', sans-serif;
   padding: 2rem;
-  background: #f8fafc;
+  background: var(--color-background-soft);
   border-radius: 12px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
@@ -111,20 +111,20 @@ function backToDashboard() {
 
 .header h1 {
   font-size: 1.8rem;
-  color: #0ea5e9;
+  color: var(--color-heading);
   margin-bottom: 0.25rem;
 }
 
 .subtitle {
-  color: #64748b;
+  color: var(--color-text-soft);
   font-size: 0.95rem;
 }
 
 .ticket-card {
-  background-color: #ffffff;
+  background-color: var(--color-background);
   padding: 1.5rem;
   border-radius: 10px;
-  box-shadow: inset 0 0 0 1px #e2e8f0;
+  box-shadow: inset 0 0 0 1px var(--color-border);
 }
 
 .info-grid {
@@ -140,7 +140,7 @@ function backToDashboard() {
 }
 
 label {
-  color: #334155;
+  color: var(--color-heading);
   font-weight: 600;
   display: block;
   margin-bottom: 0.5rem;
@@ -148,9 +148,9 @@ label {
 
 .input-select {
   width: 100%;
-  background-color: #f1f5f9;
-  color: #1e293b;
-  border: 1px solid #cbd5e1;
+  background-color: var(--color-background-soft);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   padding: 0.5rem;
   transition: border 0.2s, background 0.2s;
@@ -158,23 +158,23 @@ label {
 
 .input-select:focus {
   outline: none;
-  border-color: #0ea5e9;
-  background-color: #e0f2fe;
+  border-color: var(--color-border-hover);
+  background-color: var(--color-background);
 }
 
 .input-textarea {
   width: 100%;
-  background-color: #f1f5f9;
-  color: #1e293b;
-  border: 1px solid #cbd5e1;
+  background-color: var(--color-background-soft);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   padding: 0.5rem;
 }
 
 .input-textarea:focus {
   outline: none;
-  border-color: #0ea5e9;
-  background-color: #e0f2fe;
+  border-color: var(--color-border-hover);
+  background-color: var(--color-background);
 }
 
 .form-section {
@@ -204,8 +204,8 @@ label {
 
 .btn-secondary {
   display: inline-block;
-  background-color: #e2e8f0;
-  color: #1e293b;
+  background-color: var(--color-background-soft);
+  color: var(--color-heading);
   text-decoration: none;
   padding: 10px 16px;
   border-radius: 8px;
@@ -214,7 +214,7 @@ label {
 }
 
 .btn-secondary:hover {
-  background-color: #cbd5e1;
+  background-color: var(--color-background-mute);
 }
 
 .comments {
@@ -225,19 +225,19 @@ label {
 }
 
 .comments .muted {
-  color: #64748b;
+  color: var(--color-text-soft);
   font-size: 0.85rem;
   display: block;
 }
 
 .comments p {
   margin: 2px 0 0;
-  color: #1e293b;
+  color: var(--color-text);
 }
 
 .not-found {
   text-align: center;
-  color: #64748b;
+  color: var(--color-text-soft);
   margin-top: 3rem;
   display: grid;
   gap: 12px;
