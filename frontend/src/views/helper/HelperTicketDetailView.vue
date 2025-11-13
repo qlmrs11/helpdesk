@@ -51,6 +51,7 @@ function backToDashboard() {
         <p><strong>Title:</strong> {{ ticket.title }}</p>
         <p><strong>Category:</strong> {{ ticket.category }}</p>
         <p><strong>Priority:</strong> {{ ticket.priority }}</p>
+        <p><strong>Description:</strong> {{ ticket.description }}</p> <!-- added -->
       </div>
 
       <div class="form-section">
@@ -98,7 +99,7 @@ function backToDashboard() {
   color: #1e293b;
   font-family: 'Inter', sans-serif;
   padding: 2rem;
-  background: #f8fafc; /* latar belakang lebih cerah */
+  background: #f8fafc;
   border-radius: 12px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
@@ -110,7 +111,7 @@ function backToDashboard() {
 
 .header h1 {
   font-size: 1.8rem;
-  color: #0ea5e9; /* biru lembut */
+  color: #0ea5e9;
   margin-bottom: 0.25rem;
 }
 
@@ -131,6 +132,11 @@ function backToDashboard() {
   grid-template-columns: 1fr 1fr;
   gap: 0.75rem 1.5rem;
   margin-bottom: 1.5rem;
+}
+
+.info-grid p strong {
+  width: 120px;
+  display: inline-block;
 }
 
 label {

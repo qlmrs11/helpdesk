@@ -1,10 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import UserDashboardView from '../views/UserDashboardView.vue'
-import HelperDashboardView from '../views/HelperDashboardView.vue'
-import HelperTicketDetailView from '../views/HelperTicketDetailView.vue'
+import UserDashboardView from '../views/User/UserDashboardView.vue'
+import HelperDashboardView from '../views/helper/HelperDashboardView.vue'
+import HelperTicketDetailView from '../views/helper/HelperTicketDetailView.vue'
 import LoginView from '../views/LoginView.vue'
-import ReportsView from '../views/ReportsView.vue'
-import TicketView from '../views/TicketView.vue'
+import ReportsView from '../views/helper/ReportsView.vue'
+import TicketView from '../views/Ticket/TicketView.vue'
 import RegisterView from '../views/RegisterView.vue'
 
 const router = createRouter({
@@ -44,7 +44,7 @@ const router = createRouter({
     {
       path: '/view-tickets',
       name: 'view-tickets',
-      component: () => import('../views/ViewAllTicket.vue'),
+      component: () => import('../views/User/ViewAllTicket.vue'),
       meta: { requiresAuth: true, role: 'user' },
     },
     { path: '/', redirect: '/user' },

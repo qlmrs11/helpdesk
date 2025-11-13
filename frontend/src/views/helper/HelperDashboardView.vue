@@ -14,20 +14,19 @@ const { notYetWorked, workingOn, awaiting, completed } = t
     </section>
 
     <section class="content">
-      <!-- Tabel untuk menampilkan tiket -->
       <table class="ticket-table">
         <thead>
           <tr>
             <th>ID</th>
-            <th>Judul</th>
+            <th>Title</th>
             <th>Category</th>
             <th>Priority</th>
             <th>Status</th>
-            <th>Aksi</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          <!-- Tampil kan Tiket yang Belum Dikerjakan -->
+          <!-- Not Yet Worked -->
           <tr v-for="it in notYetWorked" :key="it.id">
             <td>#{{ it.id }}</td>
             <td>
@@ -36,14 +35,14 @@ const { notYetWorked, workingOn, awaiting, completed } = t
             <td>{{ it.category }}</td>
             <td>{{ it.priority }}</td>
             <td>
-              <span class="badge new">Baru</span>
+              <span class="badge not-yet-worked">Not Yet Worked</span>
             </td>
             <td>
-              <RouterLink :to="`/helper/ticket/${it.id}`" class="btn btn-detail">Lihat Detail</RouterLink>
+              <RouterLink :to="`/helper/ticket/${it.id}`" class="btn btn-detail">View Details</RouterLink>
             </td>
           </tr>
 
-          <!-- Tampil kan Tiket yang Sedang Dikerjakan -->
+          <!-- Working on -->
           <tr v-for="it in workingOn" :key="it.id">
             <td>#{{ it.id }}</td>
             <td>
@@ -52,14 +51,14 @@ const { notYetWorked, workingOn, awaiting, completed } = t
             <td>{{ it.category }}</td>
             <td>{{ it.priority }}</td>
             <td>
-              <span class="badge in-progress">Sedang Ditangani</span>
+              <span class="badge working-on">Working on</span>
             </td>
             <td>
-              <RouterLink :to="`/helper/ticket/${it.id}`" class="btn btn-detail">Lihat Detail</RouterLink>
+              <RouterLink :to="`/helper/ticket/${it.id}`" class="btn btn-detail">View Details</RouterLink>
             </td>
           </tr>
 
-          <!-- Tampil kan Tiket yang Menunggu Konfirmasi Pengguna -->
+          <!-- Awaiting User Confirmation -->
           <tr v-for="it in awaiting" :key="it.id">
             <td>#{{ it.id }}</td>
             <td>
@@ -68,14 +67,14 @@ const { notYetWorked, workingOn, awaiting, completed } = t
             <td>{{ it.category }}</td>
             <td>{{ it.priority }}</td>
             <td>
-              <span class="badge awaiting">Menunggu Konfirmasi</span>
+              <span class="badge awaiting">Awaiting User Confirmation</span>
             </td>
             <td>
-              <RouterLink :to="`/helper/ticket/${it.id}`" class="btn btn-detail">Lihat Detail</RouterLink>
+              <RouterLink :to="`/helper/ticket/${it.id}`" class="btn btn-detail">View Details</RouterLink>
             </td>
           </tr>
 
-          <!-- Tampil kan Tiket yang Sudah Selesai -->
+          <!-- Completed -->
           <tr v-for="it in completed" :key="it.id">
             <td>#{{ it.id }}</td>
             <td>
@@ -84,10 +83,10 @@ const { notYetWorked, workingOn, awaiting, completed } = t
             <td>{{ it.category }}</td>
             <td>{{ it.priority }}</td>
             <td>
-              <span class="badge completed">Selesai</span>
+              <span class="badge completed">Completed</span>
             </td>
             <td>
-              <RouterLink :to="`/helper/ticket/${it.id}`" class="btn btn-detail">Lihat Detail</RouterLink>
+              <RouterLink :to="`/helper/ticket/${it.id}`" class="btn btn-detail">View Details</RouterLink>
             </td>
           </tr>
         </tbody>
@@ -97,7 +96,6 @@ const { notYetWorked, workingOn, awaiting, completed } = t
 </template>
 
 <style scoped>
-/* Styling untuk tabel */
 .ticket-table {
   width: 100%;
   border-collapse: collapse;
@@ -121,24 +119,22 @@ const { notYetWorked, workingOn, awaiting, completed } = t
   font-weight: bold;
 }
 
-.new {
-  background-color: #f39c12;
+/* Status colors consistent with form */
+.badge.not-yet-worked {
+  background-color: #f59e0b; /* amber */
 }
-
-.in-progress {
-  background-color: #3498db;
+.badge.working-on {
+  background-color: #3b82f6; /* blue */
 }
-
-.awaiting {
-  background-color: #95a5a6;
+.badge.awaiting {
+  background-color: #fbbf24; /* yellow */
 }
-
-.completed {
-  background-color: #2ecc71;
+.badge.completed {
+  background-color: #10b981; /* green */
 }
 
 .btn {
-  background-color: #2980b9;
+  background-color: #2563eb;
   color: white;
   padding: 5px 10px;
   text-decoration: none;
@@ -146,7 +142,6 @@ const { notYetWorked, workingOn, awaiting, completed } = t
 }
 
 .btn-detail:hover {
-  background-color: #1c5983;
+  background-color: #1e40af;
 }
-
 </style>

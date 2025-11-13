@@ -1,43 +1,47 @@
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
   title: string
-  value: string | number
+  value: number
   subtitle?: string
-  accent?: 'green' | 'blue' | 'orange' | 'red'
+  accent?: string
 }>()
 </script>
 
 <template>
-  <div class="card" :class="`accent-${props.accent ?? 'blue'}`">
-    <div class="title">{{ props.title }}</div>
-    <div class="value">{{ props.value }}</div>
-    <div v-if="props.subtitle" class="subtitle">{{ props.subtitle }}</div>
+  <div class="stat-card" :style="{ borderTopColor: accent || '#38bdf8' }">
+    <h3 class="title">{{ title }}</h3>
+    <p class="value">{{ value }}</p>
+    <p v-if="subtitle" class="subtitle">{{ subtitle }}</p>
   </div>
 </template>
 
 <style scoped>
-.card {
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
+.stat-card {
+  border-top: 4px solid #38bdf8;
+  background-color: #fff;
   padding: 16px;
-  background: var(--color-background-soft);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  text-align: center;
+  font-family: 'Inter', sans-serif;
 }
+
 .title {
-  font-size: 0.85rem;
-  color: var(--color-text-soft);
+  font-size: 1rem;
+  color: #334155;
+  margin: 0;
 }
+
 .value {
-  font-size: 1.8rem;
-  font-weight: 700;
-  margin-top: 6px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 4px 0;
+  color: #1e293b;
 }
+
 .subtitle {
-  margin-top: 6px;
-  font-size: 0.8rem;
-  color: var(--color-text-soft);
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 0;
 }
-.accent-blue { box-shadow: 0 0 0 2px rgba(99, 102, 241, .15) inset; }
-.accent-green { box-shadow: 0 0 0 2px rgba(34, 197, 94, .15) inset; }
-.accent-orange { box-shadow: 0 0 0 2px rgba(249, 115, 22, .15) inset; }
-.accent-red { box-shadow: 0 0 0 2px rgba(239, 68, 68, .15) inset; }
 </style>
