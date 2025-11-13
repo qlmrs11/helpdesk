@@ -89,11 +89,11 @@
 .create-ticket {
   display: grid;
   place-items: start center;
-  padding: 32px 16px;
+  padding: 0 16px 32px;
 }
 .card {
   width: 100%;
-  max-width: 560px;
+  max-width: 900px;
   margin: 0 auto;
   border: 1px solid var(--color-border);
   border-radius: 16px;
@@ -112,6 +112,7 @@
   background: var(--color-background);
   box-shadow: 0 1px 0 rgba(0,0,0,.02) inset;
   font-size: 0.95rem;
+  font-family: inherit; /* use the same font as the site */
 }
 .field textarea { resize: vertical; min-height: 120px; }
 .row { display: grid; grid-template-columns: 1fr; gap: 16px; }

@@ -27,14 +27,15 @@ const statusCounts = computed(() => {
 
     <!-- 🔹 Statistik -->
     <div class="stats">
-      <StatCard title="Baru" :value="statusCounts['Not Yet Worked']" accent="#fbbf24" />
-      <StatCard title="Sedang Ditangani" :value="statusCounts['Working on']" accent="#3b82f6" />
-      <StatCard title="Menunggu Konfirmasi" :value="statusCounts['Awaiting User Confirmation']" accent="#f87171" />
-      <StatCard title="Selesai" :value="statusCounts['Completed']" accent="#22c55e" />
+      <StatCard title="New" :value="statusCounts['Not Yet Worked']" accent="#fbbf24" />
+      <StatCard title="In Progress" :value="statusCounts['Working on']" accent="#3b82f6" />
+      <StatCard title="Awaiting Confirmation" :value="statusCounts['Awaiting User Confirmation']" accent="#f87171" />
+      <StatCard title="Completed" :value="statusCounts['Completed']" accent="#22c55e" />
     </div>
 
     <!-- 🔹 Laporan Tiket -->
     <h2 class="subheader">All Tickets</h2>
+    <div class="table-wrap">
     <table class="detail-table">
       <thead>
         <tr>
@@ -55,15 +56,15 @@ const statusCounts = computed(() => {
         </tr>
       </tbody>
     </table>
+    </div>
   </section>
 </template>
 
 <style scoped>
 .helper-dashboard {
-  max-width: 1000px;
-  margin: 2rem auto;
-  padding: 1rem;
-  font-family: 'Inter', sans-serif;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px 32px;
 }
 
 .subtitle {
@@ -93,16 +94,29 @@ const statusCounts = computed(() => {
 }
 
 .detail-table th {
-  background: #0f172a;
-  color: #f8fafc;
+  background: linear-gradient(180deg, rgba(59,91,219,0.13) 0%, rgba(59,91,219,0.13) 100%);
+  color: var(--color-heading);
+  font-weight: 600;
 }
 
 .detail-table tr:nth-child(even) {
   background: #f8fafc;
 }
+/* Dark mode zebra: subtle gray (no pure black/white) */
+:root[data-theme='dark'] .detail-table tr:nth-child(even) {
+  background: var(--color-background-mute);
+}
 .subheader {
   margin-bottom: 0.5rem;
   font-size: 1.2rem;
-  color: #1e293b;
+  color: var(--color-text-soft);
+}
+
+/* Bordered rounded container for table */
+.table-wrap {
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  overflow: hidden; /* smooth rounded corners */
+  background: var(--color-background);
 }
 </style>

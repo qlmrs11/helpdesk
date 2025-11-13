@@ -66,6 +66,8 @@ function onSubmit(e: Event) {
     localStorage.setItem('auth_token', 'devtoken')
     localStorage.setItem('user', JSON.stringify({ email: form.email, role: form.role }))
   } catch {}
+  // Notify app to refresh auth-dependent UI immediately
+  window.dispatchEvent(new Event('auth-changed'))
   router.push(form.role === 'helper' ? '/helper' : '/user')
 }
 
@@ -144,7 +146,7 @@ watch(theme, (t) => applyTheme(t), { immediate: true })
         </div>
 
         <button type="submit" class="btn primary">Sign in</button>
-        <p class="muted">Don't have an account? <RouterLink to="/register" class="link">Create one</RouterLink></p>
+        <p v-if="form.role==='user'" class="muted">Don't have an account? <RouterLink to="/register" class="link">Create one</RouterLink></p>
       </form>
     </div>
   </section>
@@ -189,6 +191,14 @@ watch(theme, (t) => applyTheme(t), { immediate: true })
 .floating-toggle .switch { position: relative; width: 34px; height: 18px; border-radius: 999px; border: 1.5px solid #99a7c2; background: transparent; }
 .floating-toggle .dot { position: absolute; top: 50%; left: 2px; transform: translateY(-50%); width: 14px; height: 14px; border-radius: 50%; background: var(--color-background); box-shadow: 0 0 0 2px rgba(59,91,219,0.15); transition: left 0.2s ease; }
 .floating-toggle .dot.on { left: 18px; }
+
+/* Dark mode: increase contrast for visibility */
+:root[data-theme='dark'] .floating-toggle {
+  background: rgba(59,91,219,0.14);
+  border-color: rgba(59,91,219,0.4);
+}
+:root[data-theme='dark'] .floating-toggle .switch { border-color: rgba(203,213,255,0.7); }
+:root[data-theme='dark'] .floating-toggle .dot { box-shadow: 0 0 0 2px rgba(59,91,219,0.35); }
 .login {
   position: fixed;
   inset: 0;
@@ -234,6 +244,7 @@ watch(theme, (t) => applyTheme(t), { immediate: true })
   cursor: pointer;
   font-weight: 600;
   box-sizing: border-box;
+  color: var(--color-heading);
 }
 .seg.active {
   background: var(--color-background-soft);

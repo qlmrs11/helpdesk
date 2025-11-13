@@ -18,30 +18,34 @@ defineProps<{
 <style scoped>
 .stat-card {
   border-top: 4px solid #38bdf8;
-  background-color: #fff;
+  background: var(--color-background-soft);
   padding: 16px;
   border-radius: 12px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.08);
   text-align: center;
-  font-family: 'Inter', sans-serif;
 }
 
 .title {
   font-size: 1rem;
-  color: #334155;
+  color: var(--color-text-soft);
   margin: 0;
 }
 
 .value {
   font-size: 1.5rem;
-  font-weight: bold;
+  font-weight: 700;
   margin: 4px 0;
-  color: #1e293b;
+  color: var(--color-heading);
 }
 
 .subtitle {
   font-size: 0.85rem;
-  color: #64748b;
+  color: var(--color-text-soft);
   margin: 0;
+}
+
+/* Dark theme: soften shadow */
+:root[data-theme='dark'] .stat-card {
+  box-shadow: 0 3px 12px rgba(0,0,0,0.25);
 }
 </style>

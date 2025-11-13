@@ -3,83 +3,51 @@ import { RouterLink } from 'vue-router'
 </script>
 
 <template>
-  <div class="user-dashboard">
-    <section class="header">
-      <h1>Welcome to InDesk</h1>
+  <section class="user">
+    <div class="card">
+      <h2 class="title">Welcome to InDesk</h2>
       <p class="subtitle">Manage your internal support tickets easily</p>
-    </section>
 
-    <section class="actions">
-      <!-- Tombol Buat Tiket -->
-      <RouterLink to="/ticket">
-        <button class="btn create">+ Create Ticket</button>
-      </RouterLink>
+      <div class="actions">
+        <RouterLink to="/ticket" class="btn primary">+ Create Ticket</RouterLink>
+        <RouterLink to="/view-tickets" class="btn">View All Tickets</RouterLink>
+      </div>
 
-      <!-- Tombol Lihat Semua Tiket -->
-      <RouterLink to="/view-tickets">
-        <button class="btn view">View All Tickets</button>
-      </RouterLink>
-    </section>
-
-    <section class="info">
-      <p>
-        You can create new tickets for IT or HR issues, and check the progress of your submitted tickets.
-      </p>
-    </section>
-  </div>
+      <div class="info">
+        <p>
+          You can create new tickets for IT or HR issues, and check the progress of your submitted tickets.
+        </p>
+      </div>
+    </div>
+  </section>
 </template>
 
 <style scoped>
-.user-dashboard {
+.user {
+  position: relative;
   display: grid;
-  gap: 24px;
-  padding: 24px;
+  place-items: start center;
+  padding: 0 16px 32px;
 }
 
-.header h1 {
-  font-size: 1.8rem;
-  margin: 0;
+.card {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 28px 32px;
+  background: var(--color-background-soft);
+  box-shadow: 0 4px 24px rgba(0,0,0,.06);
 }
+.title { margin: 0; font-size: 2rem; font-weight: 600; line-height: 1.1; letter-spacing: -0.02em; color: var(--color-heading); }
+.title::after { content: none; }
+.subtitle { margin: 12px 0 16px; color: var(--color-text-soft); font-size: 1.02rem; line-height: 1.5; font-weight: 500; }
 
-.subtitle {
-  color: var(--color-text-soft);
-  margin-top: 4px;
-}
+.actions { display: flex; gap: 12px; margin: 6px 0 14px; }
+.btn { display: inline-flex; justify-content: center; padding: 8px 12px; border-radius: 12px; border: 1px solid var(--color-border); cursor: pointer; transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.05s ease; font-size: 0.95rem; text-decoration: none; color: var(--color-heading); background: var(--color-background); }
+.btn.primary { background: linear-gradient(180deg, #3b5bdb 0%, #274690 100%); color: white; border-color: transparent; font-weight: 600; }
+.btn.primary:hover { background: linear-gradient(180deg, #4563e6 0%, #2c4fa3 100%); }
 
-.actions {
-  display: flex;
-  gap: 16px;
-}
-
-.btn {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.2s ease;
-}
-
-.btn.create {
-  background-color: #22c55e;
-  color: white;
-}
-
-.btn.create:hover {
-  background-color: #16a34a;
-}
-
-.btn.view {
-  background-color: #3b82f6;
-  color: white;
-}
-
-.btn.view:hover {
-  background-color: #2563eb;
-}
-
-.info {
-  color: var(--color-text-soft);
-  font-size: 0.95rem;
-}
+.info { color: var(--color-text-soft); font-size: 0.95rem; }
 </style>

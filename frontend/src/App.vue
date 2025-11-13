@@ -60,6 +60,8 @@ onMounted(() => {
   window.addEventListener('storage', (e) => {
     if (e.key === 'auth_token' || e.key === 'user') refreshAuth()
   })
+  // Also listen to same-tab custom auth events
+  window.addEventListener('auth-changed', () => refreshAuth())
 })
 
 watch(theme, (t) => applyTheme(t), { immediate: true })
@@ -165,7 +167,7 @@ watch(theme, (t) => applyTheme(t), { immediate: true })
   background: var(--color-background);
   border-bottom: 1px solid var(--color-border);
 }
-.brand { font-size: 1.1rem; margin: 0; font-weight: 700; }
+.brand { font-size: 1.3rem; margin: 0; font-weight: 700; }
 .right { display: inline-flex; align-items: center; gap: 12px; }
 .nav { display: inline-flex; gap: 1rem; align-items: center; }
 .nav a { padding: 6px 8px; border-radius: 8px; color: var(--color-heading); text-decoration: none; }
@@ -222,5 +224,13 @@ watch(theme, (t) => applyTheme(t), { immediate: true })
   transition: left 0.2s ease;
 }
 .theme-toggle .dot.on { left: 20px; }
+
+/* Dark mode: increase contrast for visibility */
+:root[data-theme='dark'] .theme-toggle {
+  background: rgba(59,91,219,0.14);
+  border-color: rgba(59,91,219,0.4);
+}
+:root[data-theme='dark'] .theme-toggle .switch { border-color: rgba(203,213,255,0.7); }
+:root[data-theme='dark'] .theme-toggle .dot { box-shadow: 0 0 0 2px rgba(59,91,219,0.35); }
 
 </style>
