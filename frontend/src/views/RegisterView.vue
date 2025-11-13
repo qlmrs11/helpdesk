@@ -11,6 +11,7 @@ const form = reactive({
 })
 
 const router = useRouter()
+
 function onSubmit(e: Event) {
   e.preventDefault()
   if (!form.name || !form.email || !form.password) {
@@ -25,63 +26,78 @@ function onSubmit(e: Event) {
     alert('Please accept Terms')
     return
   }
+
+  // Simpan akun baru ke localStorage
   try {
     const raw = localStorage.getItem('accounts')
     const accounts = raw ? JSON.parse(raw) : {}
-    accounts[form.email] = 'user'
+    accounts[form.email] = { role: 'user', password: form.password }
     localStorage.setItem('accounts', JSON.stringify(accounts))
   } catch {}
+
+  // Simpan token dan info user aktif
   try {
     localStorage.setItem('auth_token', 'devtoken')
     localStorage.setItem('user', JSON.stringify({ email: form.email, role: 'user' }))
   } catch {}
+
   router.push('/user')
 }
 
+// === THEME HANDLER ===
 type Theme = 'light' | 'dark'
 const theme = ref<Theme>('light')
+
 function applyTheme(t: Theme) {
   document.documentElement.setAttribute('data-theme', t)
   localStorage.setItem('theme', t)
 }
+
 function toggleTheme() {
   theme.value = theme.value === 'light' ? 'dark' : 'light'
 }
+
 onMounted(() => {
   const saved = localStorage.getItem('theme') as Theme | null
   if (saved === 'light' || saved === 'dark') theme.value = saved
   else theme.value = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light'
 })
+
 watch(theme, (t) => applyTheme(t), { immediate: true })
 </script>
 
 <template>
-  <div class="auth">
-    <RouterLink to="/" class="auth-brand">InDesk</RouterLink>
-    <button
-      class="floating-toggle"
-      :aria-pressed="theme==='dark'"
-      :title="theme==='dark' ? 'Switch to light mode' : 'Switch to dark mode'"
-      @click="toggleTheme"
-    >
-      <span class="icon" aria-hidden="true">
-        <svg v-if="theme==='dark'" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" stroke="currentColor" stroke-width="1.5" fill="currentColor"/>
-        </svg>
-        <svg v-else width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="12" cy="12" r="5" fill="currentColor"/>
-          <g stroke="currentColor" stroke-width="1.5">
-            <path d="M12 2v2"/><path d="M12 20v2"/>
-            <path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/>
-            <path d="M2 12h2"/><path d="M20 12h2"/>
-            <path d="M4.93 19.07l1.41-1.41"/><path d="M17.66 6.34l1.41-1.41"/>
-          </g>
-        </svg>
-      </span>
-      <span class="switch" aria-hidden="true">
-        <span class="dot" :class="{ on: theme==='dark' }"></span>
-      </span>
-    </button>
+  <section class="auth">
+    <div class="auth-top">
+      <div class="auth-top-inner">
+        <RouterLink to="/" class="auth-brand">InDesk</RouterLink>
+        <button
+          class="floating-toggle"
+          :aria-pressed="theme==='dark'"
+          :title="theme==='dark' ? 'Switch to light mode' : 'Switch to dark mode'"
+          @click="toggleTheme"
+        >
+          <span class="icon" aria-hidden="true">
+            <svg v-if="theme==='dark'" width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" stroke="currentColor" stroke-width="1.5" fill="currentColor"/>
+            </svg>
+            <svg v-else width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="5" fill="currentColor"/>
+              <g stroke="currentColor" stroke-width="1.5">
+                <path d="M12 2v2"/><path d="M12 20v2"/>
+                <path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/>
+                <path d="M2 12h2"/><path d="M20 12h2"/>
+                <path d="M4.93 19.07l1.41-1.41"/><path d="M17.66 6.34l1.41-1.41"/>
+              </g>
+            </svg>
+          </span>
+          <span class="switch" aria-hidden="true">
+            <span class="dot" :class="{ on: theme==='dark' }"></span>
+          </span>
+        </button>
+      </div>
+    </div>
+
     <div class="card">
       <h2 class="title">Create account</h2>
       <p class="subtitle">Join us and get started</p>
@@ -103,38 +119,46 @@ watch(theme, (t) => applyTheme(t), { immediate: true })
           <span>Confirm password</span>
           <input v-model="form.confirm" type="password" placeholder="••••••••" required />
         </label>
-
         <label class="check">
           <input v-model="form.agree" type="checkbox" />
           <span>I agree to the Terms</span>
         </label>
 
         <button type="submit" class="btn primary">Create account</button>
-
         <p class="muted">Already have an account?
           <RouterLink to="/login" class="link">Sign in</RouterLink>
         </p>
       </form>
     </div>
-  </div>
+  </section>
 </template>
 
 <style scoped>
-.auth-brand {
+.auth-top {
   position: fixed;
   top: 24px;
-  left: 24px;
+  left: 0;
+  right: 0;
   z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.auth-top-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 1rem;
+}
+.auth-brand {
   font-size: 1.1rem;
   font-weight: 700;
   color: var(--color-heading);
   text-decoration: none;
 }
 .floating-toggle {
-  position: fixed;
-  top: 24px;
-  right: 24px;
-  z-index: 60;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -148,6 +172,7 @@ watch(theme, (t) => applyTheme(t), { immediate: true })
 .floating-toggle .switch { position: relative; width: 34px; height: 18px; border-radius: 999px; border: 1.5px solid #99a7c2; background: transparent; }
 .floating-toggle .dot { position: absolute; top: 50%; left: 2px; transform: translateY(-50%); width: 14px; height: 14px; border-radius: 50%; background: var(--color-background); box-shadow: 0 0 0 2px rgba(59,91,219,0.15); transition: left 0.2s ease; }
 .floating-toggle .dot.on { left: 18px; }
+
 .auth {
   position: fixed;
   inset: 0;
@@ -162,11 +187,12 @@ watch(theme, (t) => applyTheme(t), { immediate: true })
 .card {
   width: 100%;
   max-width: 560px;
-  margin: 0 auto;
+  margin: 30px auto;
   border: 1px solid var(--color-border);
   border-radius: 16px;
   padding: 28px 32px;
   background: var(--color-background-soft);
+  box-shadow: 0 4px 24px rgba(0,0,0,.06);
 }
 .title { margin: 0; font-size: 2.25rem; font-weight: 600; line-height: 1.1; letter-spacing: -0.02em; color: var(--color-heading); }
 .title::after { content: none; }
@@ -184,5 +210,6 @@ watch(theme, (t) => applyTheme(t), { immediate: true })
 
 @media (max-width: 1024px) {
   .auth { padding: 24px 16px; width: 100%; }
+  .card { margin: 8px auto 0; }
 }
 </style>

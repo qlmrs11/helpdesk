@@ -88,31 +88,35 @@ watch(theme, (t) => applyTheme(t), { immediate: true })
 
 <template>
   <section class="login">
-    <RouterLink to="/" class="auth-brand">InDesk</RouterLink>
-    <button
-      class="floating-toggle"
-      :aria-pressed="theme==='dark'"
-      :title="theme==='dark' ? 'Switch to light mode' : 'Switch to dark mode'"
-      @click="toggleTheme"
-    >
-      <span class="icon" aria-hidden="true">
-        <svg v-if="theme==='dark'" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" stroke="currentColor" stroke-width="1.5" fill="currentColor"/>
-        </svg>
-        <svg v-else width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="12" cy="12" r="5" fill="currentColor"/>
-          <g stroke="currentColor" stroke-width="1.5">
-            <path d="M12 2v2"/><path d="M12 20v2"/>
-            <path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/>
-            <path d="M2 12h2"/><path d="M20 12h2"/>
-            <path d="M4.93 19.07l1.41-1.41"/><path d="M17.66 6.34l1.41-1.41"/>
-          </g>
-        </svg>
-      </span>
-      <span class="switch" aria-hidden="true">
-        <span class="dot" :class="{ on: theme==='dark' }"></span>
-      </span>
-    </button>
+    <div class="auth-top">
+      <div class="auth-top-inner">
+        <RouterLink to="/" class="auth-brand">InDesk</RouterLink>
+        <button
+          class="floating-toggle"
+          :aria-pressed="theme==='dark'"
+          :title="theme==='dark' ? 'Switch to light mode' : 'Switch to dark mode'"
+          @click="toggleTheme"
+        >
+          <span class="icon" aria-hidden="true">
+            <svg v-if="theme==='dark'" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" stroke="currentColor" stroke-width="1.5" fill="currentColor"/>
+            </svg>
+            <svg v-else width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="5" fill="currentColor"/>
+              <g stroke="currentColor" stroke-width="1.5">
+                <path d="M12 2v2"/><path d="M12 20v2"/>
+                <path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/>
+                <path d="M2 12h2"/><path d="M20 12h2"/>
+                <path d="M4.93 19.07l1.41-1.41"/><path d="M17.66 6.34l1.41-1.41"/>
+              </g>
+            </svg>
+          </span>
+          <span class="switch" aria-hidden="true">
+            <span class="dot" :class="{ on: theme==='dark' }"></span>
+          </span>
+        </button>
+      </div>
+    </div>
     <div class="card">
       <h2 class="title">Sign in</h2>
       <p class="subtitle">Sign in to your account</p>
@@ -147,21 +151,31 @@ watch(theme, (t) => applyTheme(t), { immediate: true })
 </template>
 
 <style scoped>
-.auth-brand {
+.auth-top {
   position: fixed;
   top: 24px;
-  left: 24px;
+  left: 0;
+  right: 0;
   z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.auth-top-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 1rem;
+}
+.auth-brand {
   font-size: 1.1rem;
   font-weight: 700;
   color: var(--color-heading);
   text-decoration: none;
 }
 .floating-toggle {
-  position: fixed;
-  top: 24px;
-  right: 24px;
-  z-index: 60;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -189,7 +203,7 @@ watch(theme, (t) => applyTheme(t), { immediate: true })
 .card {
   width: 100%;
   max-width: 560px;
-  margin: 0 auto;
+  margin: 30px auto;
 
   border: 1px solid var(--color-border);
   border-radius: 16px;
