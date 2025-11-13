@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
 /* color palette from <https://github.com/vuejs/theme> */
 :root {
   --vt-c-white: #ffffff;
@@ -32,6 +34,9 @@
 
   --color-heading: var(--vt-c-text-light-1);
   --color-text: var(--vt-c-text-light-1);
+  --color-text-soft: var(--vt-c-text-light-2);
+
+  --layout-card-max-width: 900px;
 
   --section-gap: 160px;
 }
@@ -47,7 +52,38 @@
 
     --color-heading: var(--vt-c-text-dark-1);
     --color-text: var(--vt-c-text-dark-2);
+    --color-text-soft: rgba(214, 219, 233, 0.72);
+    --layout-card-max-width: 900px;
   }
+}
+
+/* Manual theme override via data-theme attribute */
+:root[data-theme='dark'] {
+  --color-background: var(--vt-c-black);
+  --color-background-soft: var(--vt-c-black-soft);
+  --color-background-mute: var(--vt-c-black-mute);
+
+  --color-border: var(--vt-c-divider-dark-2);
+  --color-border-hover: var(--vt-c-divider-dark-1);
+
+  --color-heading: var(--vt-c-text-dark-1);
+  --color-text: var(--vt-c-text-dark-2);
+  --color-text-soft: rgba(214, 219, 233, 0.72);
+  --layout-card-max-width: 900px;
+}
+
+:root[data-theme='light'] {
+  --color-background: var(--vt-c-white);
+  --color-background-soft: var(--vt-c-white-soft);
+  --color-background-mute: var(--vt-c-white-mute);
+
+  --color-border: var(--vt-c-divider-light-2);
+  --color-border-hover: var(--vt-c-divider-light-1);
+
+  --color-heading: var(--vt-c-text-light-1);
+  --color-text: var(--vt-c-text-light-1);
+  --color-text-soft: var(--vt-c-text-light-2);
+  --layout-card-max-width: 900px;
 }
 
 *,
@@ -79,8 +115,15 @@ body {
     'Droid Sans',
     'Helvetica Neue',
     sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-synthesis-weight: none;
+  font-feature-settings: 'cv02','cv03','cv04','cv11', 'ss01' 1;
+}
+
+h1, h2 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
