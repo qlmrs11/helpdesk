@@ -1,99 +1,85 @@
 <script setup lang="ts">
-import StatCard from '@/components/dashboard/StatCard.vue'
+import { RouterLink } from 'vue-router'
 </script>
 
 <template>
-  <div class="dashboard">
+  <div class="user-dashboard">
     <section class="header">
-      <h1>InDesk Dashboard</h1>
-      <p class="subtitle">Summary of today's internal support ticket activity</p>
+      <h1>Welcome to InDesk</h1>
+      <p class="subtitle">Manage your internal support tickets easily</p>
     </section>
 
-    <section class="stats">
-      <StatCard title="New Tickets" :value="7" subtitle="Today" accent="green" />
-      <StatCard title="In Progress" :value="12" subtitle="IT & HR" accent="blue" />
-      <StatCard title="Awaiting Confirmation" :value="4" subtitle="User action" accent="orange" />
-      <StatCard title="Completed" :value="32" subtitle="Last 7 days" accent="red" />
+    <section class="actions">
+      <!-- Tombol Buat Tiket -->
+      <RouterLink to="/ticket">
+        <button class="btn create">+ Create Ticket</button>
+      </RouterLink>
+
+      <!-- Tombol Lihat Semua Tiket -->
+      <RouterLink to="/view-tickets">
+        <button class="btn view">View All Tickets</button>
+      </RouterLink>
     </section>
 
-    <section class="content">
-      <div class="panel">
-        <h3>Recent Activity</h3>
-        <ul class="list">
-          <li>
-            <span>#312 Reset work email password</span>
-            <span class="muted">Category: IT • Priority: Normal</span>
-          </li>
-          <li>
-            <span>#311 Employee data change</span>
-            <span class="muted">Category: HR • Priority: High</span>
-          </li>
-          <li>
-            <span>#310 Laptop failed to boot</span>
-            <span class="muted">Category: IT • Priority: High</span>
-          </li>
-        </ul>
-      </div>
-      <div class="panel">
-        <h3>Latest Tickets</h3>
-        <ul class="list">
-          <li>
-            <span>#309 VPN access</span>
-            <span class="badge warn">Not Yet Worked</span>
-          </li>
-          <li>
-            <span>#308 Access card replacement</span>
-            <span class="badge ok">Completed</span>
-          </li>
-          <li>
-            <span>#307 Software installation</span>
-            <span class="badge info">Awaiting User Confirmation</span>
-          </li>
-        </ul>
-      </div>
+    <section class="info">
+      <p>
+        You can create new tickets for IT or HR issues, and check the progress of your submitted tickets.
+      </p>
     </section>
   </div>
 </template>
 
 <style scoped>
-.dashboard {
+.user-dashboard {
   display: grid;
-  gap: 20px;
+  gap: 24px;
+  padding: 24px;
 }
+
 .header h1 {
   font-size: 1.8rem;
   margin: 0;
 }
-.subtitle { color: var(--color-text-soft); margin-top: 4px; }
 
-.stats {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+.subtitle {
+  color: var(--color-text-soft);
+  margin-top: 4px;
+}
+
+.actions {
+  display: flex;
   gap: 16px;
 }
 
-.content {
-  display: grid;
-  grid-template-columns: 1.5fr 1fr;
-  gap: 16px;
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
 }
-.panel {
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  padding: 16px;
-  background: var(--color-background);
-}
-.panel h3 { margin-top: 0; margin-bottom: 12px; }
-.list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
-.list li { display: flex; align-items: center; justify-content: space-between; }
-.muted { color: var(--color-text-soft); }
-.badge { font-size: .75rem; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--color-border); }
-.badge.ok { background: rgba(34,197,94,.12); color: #16a34a; }
-.badge.warn { background: rgba(239,68,68,.12); color: #dc2626; }
-.badge.info { background: rgba(59,130,246,.12); color: #2563eb; }
 
-@media (max-width: 1024px) {
-  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .content { grid-template-columns: 1fr; }
+.btn.create {
+  background-color: #22c55e;
+  color: white;
+}
+
+.btn.create:hover {
+  background-color: #16a34a;
+}
+
+.btn.view {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.btn.view:hover {
+  background-color: #2563eb;
+}
+
+.info {
+  color: var(--color-text-soft);
+  font-size: 0.95rem;
 }
 </style>

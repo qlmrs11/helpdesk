@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import UserDashboardView from '../views/UserDashboardView.vue'
 import HelperDashboardView from '../views/HelperDashboardView.vue'
+import HelperTicketDetailView from '../views/HelperTicketDetailView.vue'
 import LoginView from '../views/LoginView.vue'
 import ReportsView from '../views/ReportsView.vue'
 import TicketView from '../views/TicketView.vue'
@@ -22,6 +23,12 @@ const router = createRouter({
       meta: { requiresAuth: true, role: 'helper', hideTopbar: true },
     },
     {
+      path: '/helper/ticket/:id',
+      name: 'helper-ticket-detail',
+      component: HelperTicketDetailView,
+      meta: { requiresAuth: true, role: 'helper', hideTopbar: true },
+    },
+    {
       path: '/ticket',
       name: 'ticket',
       component: TicketView,
@@ -32,6 +39,13 @@ const router = createRouter({
       name: 'reports',
       component: ReportsView,
       meta: { requiresAuth: true, role: 'helper', hideTopbar: true },
+    },
+    // 🔥 Tambahan route baru: ViewAllTicket
+    {
+      path: '/view-tickets',
+      name: 'view-tickets',
+      component: () => import('../views/ViewAllTicket.vue'),
+      meta: { requiresAuth: true, role: 'user' },
     },
     { path: '/', redirect: '/user' },
     {
@@ -49,9 +63,6 @@ const router = createRouter({
     {
       path: '/about',
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue'),
     },
   ],
@@ -61,7 +72,9 @@ router.beforeEach((to) => {
   const token = localStorage.getItem('auth_token')
   const userRaw = localStorage.getItem('user')
   let role: 'user' | 'helper' | null = null
-  try { role = userRaw ? (JSON.parse(userRaw).role ?? null) : null } catch {}
+  try {
+    role = userRaw ? (JSON.parse(userRaw).role ?? null) : null
+  } catch {}
 
   if (to.meta && (to.meta as any).requiresAuth && !token) {
     return { path: '/login' }
