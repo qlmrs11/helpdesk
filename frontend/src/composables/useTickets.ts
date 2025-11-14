@@ -1,4 +1,5 @@
-import { ref, computed, watch } from 'vue'
+import axios from 'axios'
+import { computed, reactive, toRefs } from 'vue'
 
 export type TicketStatus = 'Not Yet Worked' | 'Working on' | 'Awaiting User Confirmation' | 'Completed'
 export type TicketPriority = 'Low' | 'Normal' | 'High'
@@ -6,7 +7,7 @@ export type TicketCategory = 'IT' | 'HR'
 
 export interface TicketComment {
   id: string
-  at: string // ISO date
+  at: string
   author: string
   text: string
 }
@@ -21,111 +22,111 @@ export interface Ticket {
   comments: TicketComment[]
 }
 
-const STORAGE_KEY = 'tickets_store'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3001'
 
-function seedTickets(): Ticket[] {
-  return [
-    {
-      id: '309',
-      title: 'VPN access',
-      description: 'User cannot connect to the corporate VPN from home.',
-      category: 'IT',
-      priority: 'Normal',
-      status: 'Not Yet Worked',
-      comments: [],
-    },
-    {
-      id: '308',
-      title: 'Access card replacement',
-      description: 'Employee lost access card and needs a new one.',
-      category: 'HR',
-      priority: 'Low',
-      status: 'Completed',
-      comments: [
-        { id: 'c1', at: new Date().toISOString(), author: 'helper', text: 'Reissued card and updated records.' },
-      ],
-    },
-    {
-      id: '307',
-      title: 'Software installation',
-      description: 'Install Figma and VS Code with required extensions.',
-      category: 'IT',
-      priority: 'High',
-      status: 'Awaiting User Confirmation',
-      comments: [
-        { id: 'c2', at: new Date().toISOString(), author: 'helper', text: 'Installation completed. Please confirm.' },
-      ],
-    },
-    {
-      id: '310',
-      title: 'Laptop failed to boot',
-      description: 'Device stuck on vendor logo; possibly disk issue.',
-      category: 'IT',
-      priority: 'High',
-      status: 'Working on',
-      comments: [
-        { id: 'c3', at: new Date().toISOString(), author: 'helper', text: 'Diagnosing hardware; running tests.' },
-      ],
-    },
-  ]
+interface State {
+  tickets: Ticket[]
+  loading: boolean
+  error: string | null
 }
 
-export function useTickets() {
-  const store = ref<Ticket[]>([])
+const state = reactive<State>({
+  tickets: [],
+  loading: false,
+  error: null,
+})
 
-  const load = () => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY)
-      if (raw) store.value = JSON.parse(raw)
-      else {
-        store.value = seedTickets()
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(store.value))
-      }
-    } catch {
-      store.value = seedTickets()
-    }
+async function fetchTickets() {
+  state.loading = true
+  state.error = null
+  try {
+    const { data } = await axios.get<Ticket[]>(`${API_BASE_URL}/tickets`)
+    state.tickets = data
+  } catch (error) {
+    console.error('Failed to fetch tickets', error)
+    state.error = 'Failed to fetch tickets'
+  } finally {
+    state.loading = false
   }
+}
 
-  const save = () => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(store.value))
+async function createTicket(payload: Omit<Ticket, 'id' | 'status' | 'comments'>) {
+  state.error = null
+  try {
+    const { data } = await axios.post<Ticket>(`${API_BASE_URL}/tickets`, payload)
+    state.tickets.push(data)
+    return data
+  } catch (error) {
+    console.error('Failed to create ticket', error)
+    state.error = 'Failed to create ticket'
+    throw error
   }
+}
 
-  // groupings
-  const notYetWorked = computed(() => store.value.filter(t => t.status === 'Not Yet Worked'))
-  const workingOn = computed(() => store.value.filter(t => t.status === 'Working on'))
-  const awaiting = computed(() => store.value.filter(t => t.status === 'Awaiting User Confirmation'))
-  const completed = computed(() => store.value.filter(t => t.status === 'Completed'))
-
-  const all = computed(() => store.value)
-  const byId = (id: string) => store.value.find(t => t.id === id)
-
-  const setStatus = (id: string, status: TicketStatus) => {
-    const t = byId(id)
-    if (!t) return
-    t.status = status
-    save()
+async function updateTicket(id: string, payload: Partial<Omit<Ticket, 'id' | 'comments'>>) {
+  state.error = null
+  try {
+    const { data } = await axios.patch<Ticket>(`${API_BASE_URL}/tickets/${id}`, payload)
+    const idx = state.tickets.findIndex(t => t.id === id)
+    if (idx !== -1) state.tickets[idx] = data
+    return data
+  } catch (error) {
+    console.error('Failed to update ticket', error)
+    state.error = 'Failed to update ticket'
+    throw error
   }
+}
 
-  const addComment = (id: string, author: string, text: string) => {
-    const t = byId(id)
-    if (!t) return
-    t.comments.push({ id: Math.random().toString(36).slice(2, 9), at: new Date().toISOString(), author, text })
-    save()
+async function addComment(id: string, payload: { author: string; text: string }) {
+  state.error = null
+  try {
+    const { data } = await axios.post<Ticket>(`${API_BASE_URL}/tickets/${id}/comments`, payload)
+    const idx = state.tickets.findIndex(t => t.id === id)
+    if (idx !== -1) state.tickets[idx] = data
+    return data
+  } catch (error) {
+    console.error('Failed to add comment', error)
+    state.error = 'Failed to add comment'
+    throw error
   }
+}
 
-  // initialize
-  load()
-  watch(store, save, { deep: true })
+async function removeTicket(id: string) {
+  state.error = null
+  try {
+    await axios.delete(`${API_BASE_URL}/tickets/${id}`)
+    state.tickets = state.tickets.filter(t => t.id !== id)
+  } catch (error) {
+    console.error('Failed to delete ticket', error)
+    state.error = 'Failed to delete ticket'
+    throw error
+  }
+}
+
+function useTicketsStore() {
+  const notYetWorked = computed(() => state.tickets.filter(t => t.status === 'Not Yet Worked'))
+  const workingOn = computed(() => state.tickets.filter(t => t.status === 'Working on'))
+  const awaiting = computed(() => state.tickets.filter(t => t.status === 'Awaiting User Confirmation'))
+  const completed = computed(() => state.tickets.filter(t => t.status === 'Completed'))
+
+  const byId = (id: string) => state.tickets.find(t => t.id === id)
 
   return {
-    store,
-    all,
+    ...toRefs(state),
+    all: computed(() => state.tickets),
     notYetWorked,
     workingOn,
     awaiting,
     completed,
     byId,
-    setStatus,
+    fetchTickets,
+    createTicket,
+    updateTicket,
     addComment,
+    removeTicket,
   }
 }
+
+void fetchTickets()
+
+export const useTickets = useTicketsStore

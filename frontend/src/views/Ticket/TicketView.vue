@@ -1,46 +1,51 @@
 <script setup lang="ts">
- import { ref } from 'vue'
- import { useTickets, type TicketPriority, type TicketCategory } from '@/composables/useTickets'
+import { ref } from 'vue'
+import { useTickets, type TicketPriority, type TicketCategory } from '@/composables/useTickets'
 
- const t = useTickets()
+const { createTicket } = useTickets()
 
- const title = ref('')
- const description = ref('')
- const category = ref<TicketCategory>('IT')
- const priority = ref<TicketPriority>('Normal')
+const title = ref('')
+const description = ref('')
+const category = ref<TicketCategory>('IT')
+const priority = ref<TicketPriority>('Normal')
 
- const submitting = ref(false)
- const submitted = ref(false)
+const submitting = ref(false)
+const submitted = ref(false)
+const submitError = ref('')
 
- function resetForm() {
-   title.value = ''
-   description.value = ''
-   category.value = 'IT'
-   priority.value = 'Normal'
-   submitted.value = false
- }
+function resetForm() {
+  title.value = ''
+  description.value = ''
+  category.value = 'IT'
+  priority.value = 'Normal'
+  submitted.value = false
+  submitError.value = ''
+}
 
- function onSubmit() {
-   if (!title.value.trim() || !description.value.trim()) return
-   submitting.value = true
-   const newTicket = {
-     id: Math.floor(100000 + Math.random() * 900000).toString(),
-     title: title.value.trim(),
-     description: description.value.trim(),
-     category: category.value,
-     priority: priority.value,
-     status: 'Not Yet Worked' as const,
-     comments: [],
-   }
-   t.store.value.push(newTicket)
-   submitting.value = false
-   submitted.value = true
-   resetForm()
- }
+async function onSubmit() {
+  if (!title.value.trim() || !description.value.trim()) return
+  submitting.value = true
+  submitError.value = ''
+  try {
+    await createTicket({
+      title: title.value.trim(),
+      description: description.value.trim(),
+      category: category.value,
+      priority: priority.value,
+    })
+    submitted.value = true
+    resetForm()
+  } catch (error) {
+    submitError.value = 'Failed to submit ticket. Please try again.'
+    console.error(error)
+  } finally {
+    submitting.value = false
+  }
+}
 
- function onCancel() {
-   resetForm()
- }
+function onCancel() {
+  resetForm()
+}
 </script>
 
 <template>

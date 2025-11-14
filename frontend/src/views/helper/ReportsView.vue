@@ -18,6 +18,20 @@ const statusCounts = computed(() => {
   })
   return counts
 })
+
+function statusLabel(status: string) {
+  switch (status) {
+    case 'Working on':
+      return '⏳ Working On'
+    case 'Completed':
+      return '✔️ Completed'
+    case 'Awaiting User Confirmation':
+      return '🔔 Awaiting User'
+    case 'Not Yet Worked':
+    default:
+      return '🕓 Not Yet Worked'
+  }
+}
 </script>
 
 <template>
@@ -51,8 +65,20 @@ const statusCounts = computed(() => {
           <td>#{{ ticket.id }}</td>
           <td>{{ ticket.title }}</td>
           <td>{{ ticket.category }}</td>
-          <td>{{ ticket.priority }}</td>
-          <td>{{ ticket.status }}</td>
+          <td>
+            <span
+              :class="['priority-badge', ticket.priority.toLowerCase()]"
+            >
+              {{ ticket.priority }}
+            </span>
+          </td>
+          <td>
+            <span
+              :class="['badge', ticket.status.split(' ').join('-').toLowerCase()]"
+            >
+              {{ statusLabel(ticket.status) }}
+            </span>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -119,4 +145,69 @@ const statusCounts = computed(() => {
   overflow: hidden; /* smooth rounded corners */
   background: var(--color-background);
 }
+
+/* Status badges consistent with other tables */
+.badge {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 160px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.badge.not-yet-worked {
+  background-color: #f3f4f6; /* soft gray */
+  color: #4b5563;
+  border: 1px solid #d1d5db;
+}
+
+.badge.working-on {
+  background-color: #eff6ff; /* light blue */
+  color: #1d4ed8;
+  border: 1px solid #60a5fa; /* blue outline */
+}
+
+.badge.awaiting-user-confirmation {
+  background-color: #f5f3ff; /* light purple */
+  color: #6d28d9;
+  border: 1px solid #a855f7;
+}
+
+.badge.completed {
+  background-color: #dcfce7; /* green pastel */
+  color: #15803d;
+  border: 1px solid #4ade80;
+}
+
+/* Priority badges: red (High), green (Normal), yellow (Low) */
+.priority-badge {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 160px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.2);
+}
+
+.priority-badge.high {
+  background: linear-gradient(180deg, #e66a74 0%, #9b2c37 100%);
+}
+
+.priority-badge.normal {
+  background: linear-gradient(180deg, #f0cf80 0%, #b69139 100%);
+}
+
+.priority-badge.low {
+  background: linear-gradient(180deg, #63c267 0%, #2e7d32 100%);
+}
 </style>
+

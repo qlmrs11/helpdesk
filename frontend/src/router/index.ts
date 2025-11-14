@@ -3,6 +3,7 @@ import UserDashboardView from '../views/User/UserDashboardView.vue'
 import HelperDashboardView from '../views/helper/HelperDashboardView.vue'
 import HelperTicketDetailView from '../views/helper/HelperTicketDetailView.vue'
 import LoginView from '../views/LoginView.vue'
+import UserTicketDetailView from '../views/User/UserTicketDetailView.vue'
 import ReportsView from '../views/helper/ReportsView.vue'
 import TicketView from '../views/Ticket/TicketView.vue'
 import RegisterView from '../views/RegisterView.vue'
@@ -40,11 +41,16 @@ const router = createRouter({
       component: ReportsView,
       meta: { requiresAuth: true, role: 'helper', hideTopbar: true },
     },
-    // 🔥 Tambahan route baru: ViewAllTicket
     {
       path: '/view-tickets',
       name: 'view-tickets',
       component: () => import('../views/User/ViewAllTicket.vue'),
+      meta: { requiresAuth: true, role: 'user' },
+    },
+    {
+      path: '/user/ticket/:id',
+      name: 'user-ticket-detail',
+      component: UserTicketDetailView,
       meta: { requiresAuth: true, role: 'user' },
     },
     { path: '/', redirect: '/user' },
@@ -91,3 +97,4 @@ router.beforeEach((to) => {
 })
 
 export default router
+
