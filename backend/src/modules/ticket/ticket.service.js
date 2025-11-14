@@ -1,7 +1,7 @@
-// pathnya src/modules/ticket/ticket.service.js
+// src/modules/ticket/ticket.service.js
 const prisma = require("../../config/prisma");
 
-// Create ticket
+// CREATE TICKET
 exports.createTicket = async (userId, body) => {
   return await prisma.ticket.create({
     data: {
@@ -14,7 +14,7 @@ exports.createTicket = async (userId, body) => {
   });
 };
 
-// Get tickets (role-based)
+// GET ALL TICKETS
 exports.getTickets = async (user) => {
   let filter = {};
 
@@ -37,7 +37,7 @@ exports.getTickets = async (user) => {
   });
 };
 
-// Get ticket by ID
+// GET TICKET BY ID
 exports.getTicketById = async (id, user) => {
   const ticket = await prisma.ticket.findUnique({
     where: { id },
@@ -50,21 +50,87 @@ exports.getTicketById = async (id, user) => {
 
   if (!ticket) throw new Error("Ticket tidak ditemukan");
 
-  // USER hanya boleh melihat tiketnya
   if (user.role === "USER" && ticket.createdById !== user.id) {
     throw new Error("Anda tidak boleh melihat tiket ini");
   }
 
-  // HELPER hanya boleh melihat tiket sesuai department
-  if (user.role === "HELPER") {
-    if (!user.department) throw new Error("Departemen helper tidak terdaftar");
-
-    if (ticket.category !== user.department) {
-      throw new Error(
-        `Tiket ini hanya untuk helper kategori ${ticket.category}, bukan ${user.department}`
-      );
-    }
+  if (user.role === "HELPER" && ticket.category !== user.department) {
+    throw new Error(
+      `Tiket kategori ${ticket.category} tidak sesuai department anda (${user.department})`
+    );
   }
 
   return ticket;
+};
+
+// ASSIGN TICKET (HELPER only)
+exports.assignTicket = async (ticketId, user) => {
+  const ticket = await prisma.ticket.findUnique({
+    where: { id: ticketId },
+  });
+
+  if (!ticket) throw new Error("Ticket tidak ditemukan");
+
+  if (ticket.category !== user.department) {
+    throw new Error("Anda tidak bisa meng-assign tiket kategori lain");
+  }
+
+  if (ticket.assignedToId && ticket.assignedToId !== user.id) {
+    throw new Error("Tiket sudah ditangani helper lain");
+  }
+
+  return await prisma.ticket.update({
+    where: { id: ticketId },
+    data: {
+      assignedToId: user.id,
+      status: "IN_PROGRESS",
+    },
+  });
+};
+
+// UPDATE STATUS TICKET (HELPER only)
+exports.updateStatus = async (ticketId, newStatus, user) => {
+  const ticket = await prisma.ticket.findUnique({
+    where: { id: ticketId },
+  });
+
+  if (!ticket) throw new Error("Ticket tidak ditemukan");
+
+  if (ticket.assignedToId !== user.id) {
+    throw new Error("Anda bukan helper yang menangani tiket ini");
+  }
+
+  const validStatus = ["IN_PROGRESS", "WAITING_USER", "DONE"];
+  if (!validStatus.includes(newStatus)) {
+    throw new Error("Status tidak valid");
+  }
+
+  return await prisma.ticket.update({
+    where: { id: ticketId },
+    data: { status: newStatus },
+  });
+};
+
+// USER CONFIRM (ONLY OWNER)
+exports.confirmTicket = async (ticketId, user) => {
+  const ticket = await prisma.ticket.findUnique({
+    where: { id: ticketId },
+  });
+
+  if (!ticket) throw new Error("Ticket tidak ditemukan");
+
+  if (ticket.createdById !== user.id) {
+    throw new Error("Anda tidak boleh mengkonfirmasi tiket ini");
+  }
+
+  if (ticket.status !== "DONE") {
+    throw new Error("Tiket belum selesai, tidak bisa dikonfirmasi");
+  }
+
+  return await prisma.ticket.update({
+    where: { id: ticketId },
+    data: {
+      status: "RESOLVED", 
+    },
+  });
 };

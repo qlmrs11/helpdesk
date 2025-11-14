@@ -15,10 +15,10 @@ model User {
   role       Role      @default(USER)
   department Category?
 
-  // 🔹 Relasi ke tiket yang dibuat user
+  // Relasi ke tiket yang dibuat user
   tickets Ticket[] @relation("UserTickets")
 
-  // 🔹 Relasi ke tiket yang diassign ke user (helper)
+  // Relasi ke tiket yang diassign ke user (helper)
   assignedTickets Ticket[] @relation("AssignedTickets")
 
   comments  Comment[]
@@ -33,11 +33,11 @@ model Ticket {
   priority    Priority
   status      TicketStatus @default(PENDING)
 
-  // 🔹 Relasi ke pembuat tiket
+  // Relasi ke pembuat tiket
   createdBy   User @relation("UserTickets", fields: [createdById], references: [id])
   createdById Int
 
-  // 🔹 Relasi ke helper
+  // Relasi ke helper
   assignedTo   User? @relation("AssignedTickets", fields: [assignedToId], references: [id])
   assignedToId Int?
 
@@ -77,4 +77,5 @@ enum TicketStatus {
   IN_PROGRESS
   WAITING_USER
   DONE
+  RESOLVED   
 }
