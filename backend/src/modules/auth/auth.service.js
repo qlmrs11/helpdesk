@@ -21,11 +21,18 @@ exports.register = async (data) => {
       name: data.name,
       email: data.email,
       password: hashedPassword,
-      role: data.role || "USER", // default USER
+      role: data.role || "USER",
+      department: data.department || null,   // ⬅ SIMPAN DEPARTMENT
     },
   });
 
-  return { id: user.id, name: user.name, email: user.email, role: user.role };
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    department: user.department,
+  };
 };
 
 // LOGIN
@@ -38,8 +45,14 @@ exports.login = async (data) => {
   const valid = await bcrypt.compare(data.password, user.password);
   if (!valid) throw new Error("Password salah");
 
+  // ⬅ MASUKKAN DEPARTMENT KE JWT
   const token = jwt.sign(
-    { id: user.id, email: user.email, role: user.role },
+    {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      department: user.department,
+    },
     JWT_SECRET,
     { expiresIn: JWT_EXPIRES }
   );
@@ -47,7 +60,7 @@ exports.login = async (data) => {
   return {
     status: "success",
     message: "Login berhasil",
-    data: { token, role: user.role },
+    data: { token, role: user.role, department: user.department },
   };
 };
 
@@ -61,7 +74,13 @@ exports.getProfile = async (authHeader) => {
 
     const user = await prisma.user.findUnique({
       where: { id: decoded.id },
-      select: { id: true, name: true, email: true, role: true },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        department: true,   // ⬅ RETURN DEPARTMENT
+      },
     });
 
     if (!user) throw new Error("User tidak ditemukan");
