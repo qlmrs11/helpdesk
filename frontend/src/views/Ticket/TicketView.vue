@@ -83,7 +83,7 @@ function onCancel() {
           </label>
         </div>
 
-        <button type="submit" class="btn primary" :disabled="submitting">Submit ticket</button>
+        <button type="submit" class="btn primary">Submit ticket</button>
         <button type="button" class="btn light" @click="onCancel">Cancel</button>
       </form>
     </div>
