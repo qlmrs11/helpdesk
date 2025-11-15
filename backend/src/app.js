@@ -12,6 +12,7 @@ const authRouter = require("./modules/auth/auth.router");
 
 // Gunakan route
 app.use("/api/auth", authRouter);
+app.use("/api/tickets", require("./modules/ticket/ticket.router"));
 
 // Export app
 module.exports = app;
