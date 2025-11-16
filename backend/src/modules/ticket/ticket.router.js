@@ -9,7 +9,7 @@ router.post("/", verifyToken, authorizeRoles("USER"), controller.createTicket);
 // LIST tickets
 router.get("/", verifyToken, controller.getTickets);
 
-// PATCH routes (letakkan sebelum /:id !)
+// PATCH routes 
 router.patch("/:id/assign", verifyToken, authorizeRoles("HELPER"), controller.assignTicket);
 
 router.patch("/:id/status", verifyToken, authorizeRoles("HELPER"), controller.updateStatus);
