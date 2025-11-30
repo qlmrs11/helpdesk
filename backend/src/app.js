@@ -1,3 +1,4 @@
+// src/app.js
 const express = require("express");
 const cors = require("cors");
 const app = express();
@@ -9,8 +10,11 @@ app.use(express.json());
 // Import routes
 const authRouter = require("./modules/auth/auth.router");
 const ticketRouter = require("./modules/ticket/ticket.router");
+const commentRouter = require("./modules/comment/comment.router");
+
 // Gunakan route
 app.use("/api/auth", authRouter);
 app.use("/api/ticket", ticketRouter);
-// Export app
+app.use("/api/comments", commentRouter);
+
 module.exports = app;
