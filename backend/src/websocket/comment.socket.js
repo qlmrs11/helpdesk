@@ -1,3 +1,4 @@
+//src/comment.socket.js
 const prisma = require("../config/prisma"); // IMPORT PRISMA
 
 function registerCommentSocket(io) {

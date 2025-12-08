@@ -1,3 +1,4 @@
+// src/modules/comment/comment.controller.js
 const service = require("./comment.service");
 
 exports.createComment = async (req, res) => {
