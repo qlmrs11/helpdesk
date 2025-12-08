@@ -79,7 +79,7 @@ exports.getProfile = async (authHeader) => {
         name: true,
         email: true,
         role: true,
-        department: true,   // ⬅ RETURN DEPARTMENT
+        department: true,   
       },
     });
 
