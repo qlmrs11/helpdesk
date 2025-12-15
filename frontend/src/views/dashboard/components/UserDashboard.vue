@@ -1,4 +1,3 @@
-// src/views/dashboard/components/UserDashboard.vue
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
@@ -15,8 +14,8 @@ const statusOptions = [
   { value: 'ALL', label: 'Semua Ticket', color: 'gray' },
   { value: 'PENDING', label: 'Pending', color: 'yellow' },
   { value: 'IN_PROGRESS', label: 'In Progress', color: 'blue' },
-  { value: 'WAITING_USER', label: 'Waiting User', color: 'orange' },
   { value: 'DONE', label: 'Done', color: 'green' },
+  { value: 'WAITING_USER', label: 'Waiting User', color: 'orange' },
   { value: 'RESOLVED', label: 'Resolved', color: 'emerald' },
 ];
 
@@ -33,6 +32,7 @@ const ticketStats = computed(() => {
     pending: 0,
     inProgress: 0,
     done: 0,
+    waitingUser: 0,
     resolved: 0,
   };
 
@@ -40,6 +40,7 @@ const ticketStats = computed(() => {
     if (ticket.status === 'PENDING') stats.pending++;
     if (ticket.status === 'IN_PROGRESS') stats.inProgress++;
     if (ticket.status === 'DONE') stats.done++;
+    if (ticket.status === 'WAITING_USER') stats.waitingUser++;
     if (ticket.status === 'RESOLVED') stats.resolved++;
   });
 
@@ -80,12 +81,12 @@ function goToCreateTicket() {
 
     <!-- Stats Cards -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
         <!-- Total -->
         <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-gray-500">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-gray-500 text-sm font-medium">Total Ticket</p>
+              <p class="text-gray-500 text-sm font-medium">Total</p>
               <p class="text-3xl font-bold text-gray-800 mt-1">{{ ticketStats.total }}</p>
             </div>
             <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
@@ -120,15 +121,28 @@ function goToCreateTicket() {
           </div>
         </div>
 
-        <!-- Resolved -->
+        <!-- Done -->
         <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-gray-500 text-sm font-medium">Resolved</p>
-              <p class="text-3xl font-bold text-green-600 mt-1">{{ ticketStats.resolved }}</p>
+              <p class="text-gray-500 text-sm font-medium">Done</p>
+              <p class="text-3xl font-bold text-green-600 mt-1">{{ ticketStats.done }}</p>
             </div>
             <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
               <span class="text-2xl">✅</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Waiting User -->
+        <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-orange-500">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-500 text-sm font-medium">Waiting</p>
+              <p class="text-3xl font-bold text-orange-600 mt-1">{{ ticketStats.waitingUser }}</p>
+            </div>
+            <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+              <span class="text-2xl">⏸️</span>
             </div>
           </div>
         </div>

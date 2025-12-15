@@ -1,4 +1,3 @@
-// src/store/ticket.store.ts
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import axios from 'axios';
@@ -15,7 +14,7 @@ export interface Ticket {
   priority: Priority;
   status: TicketStatus;
   userId: number;
-  helperId: number | null;
+  assignedToId: number | null;
   createdAt: string;
   updatedAt: string;
   user?: {
@@ -23,11 +22,10 @@ export interface Ticket {
     name: string;
     email: string;
   };
-  helper?: {
+  assignedTo?: {
     id: number;
     name: string;
     email: string;
-    department: string;
   };
 }
 
@@ -48,7 +46,7 @@ export const useTicketStore = defineStore('ticket', () => {
   async function fetchUserTickets() {
     loading.value = true;
     try {
-      const response = await axios.get(`${API_URL}/user`);
+      const response = await axios.get(`${API_URL}`);
       if (response.data.status === 'success') {
         tickets.value = response.data.data;
       }
@@ -62,7 +60,7 @@ export const useTicketStore = defineStore('ticket', () => {
   async function fetchHelperTickets() {
     loading.value = true;
     try {
-      const response = await axios.get(`${API_URL}/helper`);
+      const response = await axios.get(`${API_URL}`);
       if (response.data.status === 'success') {
         tickets.value = response.data.data;
       }

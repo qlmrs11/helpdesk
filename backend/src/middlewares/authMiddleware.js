@@ -1,4 +1,4 @@
-// pathnya src/middlewares/authMiddleware.js
+// backend/src/middlewares/authMiddleware.js
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET || "supersecret123";
 
@@ -51,3 +51,6 @@ exports.authorizeRoles = (...roles) => {
     next();
   };
 };
+
+// ALIAS BIAR KONSISTEN
+exports.authMiddleware = exports.verifyToken;

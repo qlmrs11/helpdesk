@@ -6,7 +6,7 @@ import { io, Socket } from 'socket.io-client';
 
 export interface Comment {
   id: number;
-  text: string;
+  content: string; // ← GANTI dari 'text' ke 'content'
   ticketId: number;
   userId: number;
   createdAt: string;

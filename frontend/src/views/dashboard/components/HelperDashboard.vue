@@ -1,4 +1,3 @@
-// src/views/dashboard/components/HelperDashboard.vue
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
 import { useTicketStore } from '@/store/ticket.store';
@@ -16,16 +15,17 @@ const statusOptions = [
   { value: 'ALL', label: 'Semua Ticket', color: 'gray' },
   { value: 'PENDING', label: 'Pending', color: 'yellow' },
   { value: 'IN_PROGRESS', label: 'In Progress', color: 'blue' },
-  { value: 'WAITING_USER', label: 'Waiting User', color: 'orange' },
   { value: 'DONE', label: 'Done', color: 'green' },
+  { value: 'WAITING_USER', label: 'Waiting User', color: 'orange' },
+  { value: 'RESOLVED', label: 'Resolved', color: 'emerald' },
 ];
 
 const filteredTickets = computed(() => {
   let tickets = ticketStore.tickets;
 
-  // Filter by assigned
+  // Filter by assigned - FIX: pakai assignedToId bukan helperId
   if (showAssignedOnly.value) {
-    tickets = tickets.filter(t => t.helperId === authStore.user?.id);
+    tickets = tickets.filter(t => t.assignedToId === authStore.user?.id);
   }
 
   // Filter by status
@@ -39,16 +39,20 @@ const filteredTickets = computed(() => {
 const ticketStats = computed(() => {
   const stats = {
     total: ticketStore.tickets.length,
-    myTickets: ticketStore.tickets.filter(t => t.helperId === authStore.user?.id).length,
+    myTickets: ticketStore.tickets.filter(t => t.assignedToId === authStore.user?.id).length,
     pending: 0,
     inProgress: 0,
     done: 0,
+    waitingUser: 0,
+    resolved: 0,
   };
 
   ticketStore.tickets.forEach(ticket => {
     if (ticket.status === 'PENDING') stats.pending++;
     if (ticket.status === 'IN_PROGRESS') stats.inProgress++;
     if (ticket.status === 'DONE') stats.done++;
+    if (ticket.status === 'WAITING_USER') stats.waitingUser++;
+    if (ticket.status === 'RESOLVED') stats.resolved++;
   });
 
   return stats;
@@ -90,12 +94,12 @@ onMounted(() => {
 
     <!-- Stats Cards -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
         <!-- Total Department -->
         <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-gray-500">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-gray-500 text-sm font-medium">Total Department</p>
+              <p class="text-gray-500 text-sm font-medium">Total</p>
               <p class="text-3xl font-bold text-gray-800 mt-1">{{ ticketStats.total }}</p>
             </div>
             <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
@@ -139,6 +143,19 @@ onMounted(() => {
             </div>
             <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
               <span class="text-2xl">✅</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Waiting User -->
+        <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-orange-500">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-500 text-sm font-medium">Waiting</p>
+              <p class="text-3xl font-bold text-orange-600 mt-1">{{ ticketStats.waitingUser }}</p>
+            </div>
+            <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+              <span class="text-2xl">⏸️</span>
             </div>
           </div>
         </div>
