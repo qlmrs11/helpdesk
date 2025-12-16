@@ -21,8 +21,9 @@ model User {
   // Relasi ke tiket yang diassign ke user (helper)
   assignedTickets Ticket[] @relation("AssignedTickets")
 
-  comments  Comment[]
-  createdAt DateTime  @default(now())
+  comments      Comment[]
+  notifications Notification[] // ← TAMBAHAN BARU
+  createdAt     DateTime       @default(now())
 }
 
 model Ticket {
@@ -41,9 +42,10 @@ model Ticket {
   assignedTo   User? @relation("AssignedTickets", fields: [assignedToId], references: [id])
   assignedToId Int?
 
-  comments  Comment[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  comments      Comment[]
+  notifications Notification[] // ← TAMBAHAN BARU
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 }
 
 model Comment {
@@ -54,6 +56,24 @@ model Comment {
   ticket    Ticket   @relation(fields: [ticketId], references: [id])
   ticketId  Int
   createdAt DateTime @default(now())
+}
+
+// ← MODEL BARU
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  type      String   // TICKET_CREATED, STATUS_UPDATED, COMMENT_ADDED, dll
+  title     String
+  message   String   @db.Text
+  ticketId  Int?
+  ticket    Ticket?  @relation(fields: [ticketId], references: [id])
+  metadata  String?  @db.Text // JSON string untuk data tambahan
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([ticketId])
 }
 
 enum Role {
@@ -77,5 +97,5 @@ enum TicketStatus {
   IN_PROGRESS
   WAITING_USER
   DONE
-  RESOLVED   
+  RESOLVED
 }
