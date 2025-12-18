@@ -1,3 +1,4 @@
+// src/store/ticket.store.ts
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import axios from 'axios';
@@ -43,10 +44,13 @@ export const useTicketStore = defineStore('ticket', () => {
 
   const API_URL = 'http://localhost:3000/api/ticket';
 
+  // =========================
+  // USER - get tickets milik user
+  // =========================
   async function fetchUserTickets() {
     loading.value = true;
     try {
-      const response = await axios.get(`${API_URL}`);
+      const response = await axios.get(`${API_URL}/user`);
       if (response.data.status === 'success') {
         tickets.value = response.data.data;
       }
@@ -57,10 +61,13 @@ export const useTicketStore = defineStore('ticket', () => {
     }
   }
 
+  // =========================
+  // HELPER - get tickets untuk helper
+  // =========================
   async function fetchHelperTickets() {
     loading.value = true;
     try {
-      const response = await axios.get(`${API_URL}`);
+      const response = await axios.get(`${API_URL}/helper`);
       if (response.data.status === 'success') {
         tickets.value = response.data.data;
       }
@@ -93,13 +100,17 @@ export const useTicketStore = defineStore('ticket', () => {
     try {
       const response = await axios.post(API_URL, data);
       if (response.data.status === 'success') {
-        return { success: true, data: response.data.data, message: response.data.message };
+        return {
+          success: true,
+          data: response.data.data,
+          message: response.data.message,
+        };
       }
       return { success: false, message: response.data.message };
     } catch (error: any) {
-      return { 
-        success: false, 
-        message: error.response?.data?.message || 'Gagal membuat ticket' 
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Gagal membuat ticket',
       };
     } finally {
       loading.value = false;
@@ -115,9 +126,9 @@ export const useTicketStore = defineStore('ticket', () => {
       }
       return { success: false, message: response.data.message };
     } catch (error: any) {
-      return { 
-        success: false, 
-        message: error.response?.data?.message || 'Gagal assign ticket' 
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Gagal assign ticket',
       };
     }
   }
@@ -131,9 +142,9 @@ export const useTicketStore = defineStore('ticket', () => {
       }
       return { success: false, message: response.data.message };
     } catch (error: any) {
-      return { 
-        success: false, 
-        message: error.response?.data?.message || 'Gagal update status' 
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Gagal update status',
       };
     }
   }
@@ -147,9 +158,9 @@ export const useTicketStore = defineStore('ticket', () => {
       }
       return { success: false, message: response.data.message };
     } catch (error: any) {
-      return { 
-        success: false, 
-        message: error.response?.data?.message || 'Gagal konfirmasi resolved' 
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Gagal konfirmasi resolved',
       };
     }
   }
