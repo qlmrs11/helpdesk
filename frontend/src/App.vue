@@ -1,5 +1,24 @@
 <script setup lang="ts">
-// App.vue - Main App Component
+import { onMounted, onUnmounted } from 'vue';
+import { useAuthStore } from '@/store/auth.store';
+import { useNotificationStore } from '@/store/notification.store';
+
+const authStore = useAuthStore();
+const notificationStore = useNotificationStore();
+
+onMounted(() => {
+  // Jika user sudah login, connect notification socket
+  if (authStore.isAuthenticated && authStore.user) {
+    notificationStore.connectSocket();
+    notificationStore.fetchUnreadCount();
+    notificationStore.requestNotificationPermission();
+  }
+});
+
+onUnmounted(() => {
+  // Disconnect socket saat app unmount
+  notificationStore.disconnectSocket();
+});
 </script>
 
 <template>

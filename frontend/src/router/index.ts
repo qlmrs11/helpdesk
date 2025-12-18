@@ -1,5 +1,6 @@
 // src/router/index.ts
 import { createRouter, createWebHistory } from 'vue-router';
+import { useAuthStore } from '@/store/auth.store';
 
 const routes = [
   {
@@ -36,6 +37,13 @@ const routes = [
     component: () => import('@/views/ticket/TicketDetailView.vue'),
     meta: { requiresAuth: true },
   },
+  // ← TAMBAH ROUTE INI
+  {
+    path: '/notifications',
+    name: 'Notifications',
+    component: () => import('@/views/notification/NotificationListView.vue'),
+    meta: { requiresAuth: true },
+  },
 ];
 
 const router = createRouter({
@@ -45,7 +53,6 @@ const router = createRouter({
 
 // Router Guard
 router.beforeEach((to, from, next) => {
-  // Check localStorage directly untuk avoid Pinia timing issue
   const token = localStorage.getItem('token');
   const userStr = localStorage.getItem('user');
   const user = userStr ? JSON.parse(userStr) : null;

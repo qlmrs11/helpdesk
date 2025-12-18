@@ -59,6 +59,13 @@ export const useAuthStore = defineStore('auth', () => {
 
         // Fetch user profile
         await fetchProfile();
+
+        // Connect notification socket setelah login
+        const { useNotificationStore } = await import('./notification.store');
+        const notificationStore = useNotificationStore();
+        notificationStore.connectSocket();
+        notificationStore.fetchUnreadCount();
+        notificationStore.requestNotificationPermission();
         
         return { success: true, message: response.data.message };
       }
@@ -90,12 +97,10 @@ export const useAuthStore = defineStore('auth', () => {
   async function fetchProfile() {
     try {
       const response = await axios.get('http://localhost:3000/api/user/me');
-      // Backend response langsung return user object, bukan wrapped
       user.value = response.data;
       localStorage.setItem('user', JSON.stringify(response.data));
     } catch (error) {
       console.error('Fetch profile error:', error);
-      // Kalau error, coba ambil dari localStorage
       const savedUser = localStorage.getItem('user');
       if (savedUser) {
         user.value = JSON.parse(savedUser);
@@ -103,7 +108,14 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  function logout() {
+  async function logout() {
+    // Disconnect notification socket
+    const { useNotificationStore } = await import('./notification.store');
+    const notificationStore = useNotificationStore();
+    notificationStore.disconnectSocket();
+    notificationStore.clearNotifications();
+
+    // Clear auth
     token.value = null;
     user.value = null;
     localStorage.removeItem('token');

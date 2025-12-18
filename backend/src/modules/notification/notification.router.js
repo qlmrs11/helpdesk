@@ -1,4 +1,3 @@
-// backend/src/modules/notification/notification.router.js
 const router = require("express").Router();
 const controller = require("./notification.controller");
 const { authMiddleware } = require("../../middlewares/authMiddleware");
