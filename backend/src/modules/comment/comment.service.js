@@ -1,20 +1,43 @@
-// src/modules/comment/service.controller.js
-const grpc = require("../../config/grpc");
+// backend/src/modules/comment/comment.service.js
+const prisma = require("../../config/prisma");
 
-exports.createComment = (userId, ticketId, content) => {
-  return new Promise((resolve, reject) => {
-    grpc.CreateComment({ userId, ticketId, content }, (err, res) => {
-      if (err) return reject(err);
-      resolve(res);
-    });
+exports.createComment = async (userId, ticketId, text) => {
+  const comment = await prisma.comment.create({
+    data: {
+      userId,
+      ticketId,
+      content: text, // ← GANTI dari 'text' ke 'content'
+    },
+    include: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+        },
+      },
+    },
   });
+
+  return comment;
 };
 
-exports.getComments = (ticketId) => {
-  return new Promise((resolve, reject) => {
-    grpc.GetComments({ ticketId }, (err, res) => {
-      if (err) return reject(err);
-      resolve(res.comments);
-    });
+exports.getComments = async (ticketId) => {
+  const comments = await prisma.comment.findMany({
+    where: { ticketId },
+    include: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+        },
+      },
+    },
+    orderBy: { createdAt: "asc" },
   });
+
+  return comments;
 };

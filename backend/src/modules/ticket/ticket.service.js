@@ -1,7 +1,7 @@
-// src/modules/ticket/ticket.service.js
+//backend/src/modules/ticket/ticket.service.js
 const prisma = require("../../config/prisma");
 
-// CREATE TICKET
+// CREATE TICKET - Status awal PENDING
 exports.createTicket = async (userId, body) => {
   return await prisma.ticket.create({
     data: {
@@ -14,7 +14,7 @@ exports.createTicket = async (userId, body) => {
   });
 };
 
-// GET ALL TICKETS
+// GET ALL TICKETS - Filter by role
 exports.getTickets = async (user) => {
   let filter = {};
 
@@ -29,22 +29,60 @@ exports.getTickets = async (user) => {
   return await prisma.ticket.findMany({
     where: filter,
     include: {
-      createdBy: true,
-      assignedTo: true,
+      createdBy: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+      assignedTo: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
       comments: true,
     },
     orderBy: { createdAt: "desc" },
   });
 };
 
-// GET TICKET BY ID
+// GET TICKET BY ID - Cek permission
 exports.getTicketById = async (id, user) => {
   const ticket = await prisma.ticket.findUnique({
     where: { id },
     include: {
-      createdBy: true,
-      assignedTo: true,
-      comments: true,
+      createdBy: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+      assignedTo: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+      comments: {
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              role: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "asc",
+        },
+      },
     },
   });
 
@@ -63,7 +101,7 @@ exports.getTicketById = async (id, user) => {
   return ticket;
 };
 
-// ASSIGN TICKET (HELPER only)
+// ASSIGN TICKET - PENDING -> IN_PROGRESS
 exports.assignTicket = async (ticketId, user) => {
   const ticket = await prisma.ticket.findUnique({
     where: { id: ticketId },
@@ -79,6 +117,10 @@ exports.assignTicket = async (ticketId, user) => {
     throw new Error("Tiket sudah ditangani helper lain");
   }
 
+  if (ticket.status !== "PENDING") {
+    throw new Error("Tiket sudah di-assign");
+  }
+
   return await prisma.ticket.update({
     where: { id: ticketId },
     data: {
@@ -88,7 +130,7 @@ exports.assignTicket = async (ticketId, user) => {
   });
 };
 
-// UPDATE STATUS TICKET (HELPER only)
+// UPDATE STATUS - Helper only
 exports.updateStatus = async (ticketId, newStatus, user) => {
   const ticket = await prisma.ticket.findUnique({
     where: { id: ticketId },
@@ -100,9 +142,22 @@ exports.updateStatus = async (ticketId, newStatus, user) => {
     throw new Error("Anda bukan helper yang menangani tiket ini");
   }
 
-  const validStatus = ["IN_PROGRESS", "WAITING_USER", "DONE"];
-  if (!validStatus.includes(newStatus)) {
-    throw new Error("Status tidak valid");
+  if (ticket.status === "RESOLVED") {
+    throw new Error("Tiket sudah resolved, tidak bisa diubah lagi");
+  }
+
+  const allowedTransitions = {
+    IN_PROGRESS: ["DONE"],
+    DONE: ["IN_PROGRESS", "WAITING_USER"],
+    WAITING_USER: ["IN_PROGRESS"],
+  };
+
+  const allowed = allowedTransitions[ticket.status];
+  
+  if (!allowed || !allowed.includes(newStatus)) {
+    throw new Error(
+      `Tidak bisa ubah status dari ${ticket.status} ke ${newStatus}`
+    );
   }
 
   return await prisma.ticket.update({
@@ -111,7 +166,7 @@ exports.updateStatus = async (ticketId, newStatus, user) => {
   });
 };
 
-// USER CONFIRM (ONLY OWNER)
+// USER CONFIRM - WAITING_USER -> RESOLVED
 exports.confirmTicket = async (ticketId, user) => {
   const ticket = await prisma.ticket.findUnique({
     where: { id: ticketId },
@@ -123,8 +178,8 @@ exports.confirmTicket = async (ticketId, user) => {
     throw new Error("Anda tidak boleh mengkonfirmasi tiket ini");
   }
 
-  if (ticket.status !== "DONE") {
-    throw new Error("Tiket belum selesai, tidak bisa dikonfirmasi");
+  if (ticket.status !== "WAITING_USER") {
+    throw new Error("Tiket belum di status WAITING_USER");
   }
 
   return await prisma.ticket.update({

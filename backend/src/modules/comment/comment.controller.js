@@ -1,29 +1,30 @@
-// src/modules/comment/comment.controller.js
+// backend/src/modules/comment/comment.controller.js
 const service = require("./comment.service");
 
 exports.createComment = async (req, res) => {
   try {
-    const { ticketId, content } = req.body;
+    const { ticketId, text } = req.body;
     const userId = req.user.id;
 
-    const data = await service.createComment(userId, ticketId, content);
+    const data = await service.createComment(userId, ticketId, text);
 
-    // Emit websocket
+    // Emit websocket ke semua user di room ticket ini
     req.io.to(`ticket_${ticketId}`).emit("new_comment", data);
 
     res.json({ status: "success", data });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    console.error("Error create comment:", err);
+    res.status(400).json({ status: "error", message: err.message });
   }
 };
 
 exports.getComments = async (req, res) => {
   try {
     const ticketId = Number(req.params.ticketId);
-    const comments = await service.getComments(ticketId);
-
-    res.json({ status: "success", comments });
+    const data = await service.getComments(ticketId);
+    res.json({ status: "success", data });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    console.error("Error get comments:", err);
+    res.status(400).json({ status: "error", message: err.message });
   }
 };
