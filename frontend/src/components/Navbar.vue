@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { useAuthStore } from '@/store/auth.store';
 import { useRouter } from 'vue-router';
+import NotificationBell from './NotificationBell.vue'; // ← TAMBAH INI
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -36,8 +37,11 @@ function handleLogout() {
           </div>
         </div>
 
-        <!-- User Info & Logout -->
+        <!-- User Info & Actions -->
         <div class="flex items-center gap-4">
+          <!-- Notification Bell ← TAMBAH INI -->
+          <NotificationBell />
+
           <!-- User Badge -->
           <div class="flex items-center gap-3 bg-gray-50 px-4 py-2 rounded-lg">
             <div class="w-9 h-9 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
